@@ -23,6 +23,7 @@
     PHAsset *videoAsset;
     UIView *cameraView;
     UIView *playerView;
+    AVPlayer *player;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_record;

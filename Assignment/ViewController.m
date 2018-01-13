@@ -89,7 +89,7 @@
 
     [captureSession startRunning];
     
-    
+    player = [[AVPlayer alloc] init];
     
 }
 
@@ -150,9 +150,8 @@
     if (!isRecording){
         [self.btn_record setImage:[UIImage imageNamed:@"video_record_stop"] forState:normal];
         isRecording = YES;
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-        NSString *basePath = paths.firstObject;
-        NSString *outputPath = [[NSString alloc] initWithFormat:@"%@/%@", basePath, @"output.mov"];
+        
+        NSString *outputPath = [[NSString alloc] initWithFormat:@"%@%@", NSTemporaryDirectory(), @"output.mov"];
         NSURL *outputURL = [[NSURL alloc] initFileURLWithPath:outputPath];
         currentURL = outputURL;
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -194,15 +193,9 @@
                 // Save the movie file to the photo library and cleanup.
                 [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                     PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
-                    options.shouldMoveFile = YES;
+                    options.shouldMoveFile = NO;
                     PHAssetCreationRequest *creationRequest = [PHAssetCreationRequest creationRequestForAsset];
-                    PHObjectPlaceholder *assetPlaceholder = creationRequest.placeholderForCreatedAsset;
                     [creationRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:outputFileURL options:options];
-                    PHFetchResult<PHAsset *> *newAssets = [PHAsset fetchAssetsWithLocalIdentifiers: @[assetPlaceholder.localIdentifier] options:nil];
-                    PHAsset *videoAsset = [newAssets firstObject];
-                    [videoAsset requestContentEditingInputWithOptions:[PHContentEditingInputRequestOptions new] completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
-                        currentURL = contentEditingInput.fullSizeImageURL;
-                    }];
                 } completionHandler:^( BOOL success, NSError *error ) {
                     if ( ! success ) {
                         NSLog( @"Could not save movie to photo library: %@", error );
@@ -232,14 +225,8 @@
     
     [captureSession stopRunning];
     
-    NSString *thePath=[[NSBundle mainBundle] pathForResource:@"yourVideo" ofType:@"mov"];
-    NSURL *theurl=[NSURL fileURLWithPath:thePath];
-
-    NSString *fullpath = [[self documentsDirectory] stringByAppendingPathComponent:@"output.mov"];
-    NSURL *vedioURL =[NSURL fileURLWithPath:fullpath];
-    
     AVPlayerItem* playerItem = [AVPlayerItem playerItemWithURL:currentURL];
-    AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+    [player replaceCurrentItemWithPlayerItem:playerItem];
     AVPlayerLayer *layer = [AVPlayerLayer layer];
     [layer setPlayer:player];
     [layer setFrame: [[[self view] layer] bounds]];
@@ -250,18 +237,10 @@
     [[playerView layer] addSublayer:layer];
     [player play];
     
-//    AVPlayerViewController *controller = [[AVPlayerViewController alloc] init];
-//    controller.player = player;
-//
-//    [self addChildViewController:controller];
-//    [self.view addSubview:controller.view];
-//    controller.view.frame = self.view.frame;
-//
-//    [player play];
 }
 
-- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
-{
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position{
+    
     AVCaptureDeviceDiscoverySession *session = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera] mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionUnspecified];
     NSArray *devices =  [session devices];
     for (AVCaptureDevice *device in devices)
@@ -272,15 +251,13 @@
     return nil;
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    
-    //    Or you can get the image url from AssetsLibrary
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     currentURL = [info valueForKey:UIImagePickerControllerMediaURL];
     [[picker topViewController] dismissViewControllerAnimated: YES completion: NULL];
 }
 
 - (IBAction)closeReplay:(id)sender{
+    [player pause];
     [self.view sendSubviewToBack:playerView];
     [captureSession startRunning];
 }
