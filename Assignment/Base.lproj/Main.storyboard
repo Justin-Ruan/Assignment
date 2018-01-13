@@ -34,6 +34,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nN5-XQ-Zlj">
                                                 <rect key="frame" x="2.5" y="35" width="44" height="30"/>
                                                 <state key="normal" title="Select"/>
+                                                <connections>
+                                                    <action selector="seletcVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GgV-Cb-JKM"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>

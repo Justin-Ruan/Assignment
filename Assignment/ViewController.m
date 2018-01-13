@@ -16,6 +16,12 @@
 
 @synthesize PreviewLayer;
 
+- (NSString *)documentsDirectory{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -147,7 +153,9 @@
 - (IBAction)StartStopButtonPressed:(id)sender{
     if (!isRecording){
         isRecording = YES;
-        NSString *outputPath = [[NSString alloc] initWithFormat:@"%@%@", NSTemporaryDirectory(), @"output.mov"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+        NSString *basePath = paths.firstObject;
+        NSString *outputPath = [[NSString alloc] initWithFormat:@"%@/%@", basePath, @"output.mov"];
         NSURL *outputURL = [[NSURL alloc] initFileURLWithPath:outputPath];
         currentURL = outputURL;
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -181,6 +189,7 @@
         }
     }
     if(RecordedSuccessfully){
+        currentURL = outputFileURL;
         [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
             if ( status == PHAuthorizationStatusAuthorized ) {
                 // Save the movie file to the photo library and cleanup.
@@ -204,49 +213,62 @@
             else {
             }
         }];
-        
-        AVPlayer *player = [AVPlayer playerWithURL: currentURL];
-        AVPlayerLayer *layer = [AVPlayerLayer layer];
-        [layer setPlayer:player];
-        [layer setFrame: [[[self view] layer] bounds]];
-        [layer setBackgroundColor:[UIColor blackColor].CGColor];
-        [layer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-        
-        UIView *playerView = [[UIView alloc] init];
-        [[self view] addSubview:playerView];
-        [self.view bringSubviewToFront:playerView];
-        [[playerView layer] addSublayer:layer];
-        [player play];
     }
     
+}
+- (IBAction)seletcVideo:(id)sender{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePickerController.delegate = self;
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    // This code ensures only videos are shown to the end user
+    imagePickerController.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
+    
+    imagePickerController.videoQuality = UIImagePickerControllerQualityTypeHigh;
+    
+    [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
 - (IBAction)playVideo:(id)sender{
     
     [captureSession stopRunning];
     
-    AVPlayer *player = [AVPlayer playerWithURL: currentURL];
+    NSString *thePath=[[NSBundle mainBundle] pathForResource:@"yourVideo" ofType:@"mov"];
+    NSURL *theurl=[NSURL fileURLWithPath:thePath];
+
+    NSString *fullpath = [[self documentsDirectory] stringByAppendingPathComponent:@"output.mov"];
+    NSURL *vedioURL =[NSURL fileURLWithPath:fullpath];
+    
+    AVPlayerItem* playerItem = [AVPlayerItem playerItemWithURL:currentURL];
+    AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
     AVPlayerLayer *layer = [AVPlayerLayer layer];
     [layer setPlayer:player];
     [layer setFrame: [[[self view] layer] bounds]];
     [layer setBackgroundColor:[UIColor blackColor].CGColor];
     [layer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-    
+
     UIView *playerView = [[UIView alloc] init];
     [[self view] addSubview:playerView];
     [self.view bringSubviewToFront:playerView];
     [[playerView layer] addSublayer:layer];
     [player play];
     
-//    AVPlayerViewController *controller = [[AVPlayerViewController alloc]init];
+//    AVPlayerViewController *controller = [[AVPlayerViewController alloc] init];
 //    controller.player = player;
 //
 //    [self addChildViewController:controller];
 //    [self.view addSubview:controller.view];
 //    controller.view.frame = self.view.frame;
-    
-    
+//
+//    [player play];
+}
 
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    
+    //    Or you can get the image url from AssetsLibrary
+    currentURL = [info valueForKey:UIImagePickerControllerMediaURL];
+    [[picker topViewController] dismissViewControllerAnimated: YES completion: NULL];
 }
 
 @end

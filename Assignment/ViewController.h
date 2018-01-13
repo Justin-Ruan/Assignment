@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <Photos/Photos.h>
 #import <AVKit/AVKit.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import <MediaPlayer/MediaPlayer.h>
 
 #define CAPTURE_FPS 30
@@ -32,6 +33,7 @@
 - (IBAction)StartStopButtonPressed:(id)sender;
 - (IBAction)CameraToggleButtonPressed:(id)sender;
 - (IBAction)playVideo:(id)sender;
+- (IBAction)seletcVideo:(id)sender;
 
 @end
 
