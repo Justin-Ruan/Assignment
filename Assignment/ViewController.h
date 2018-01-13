@@ -7,9 +7,33 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
+#import <Photos/Photos.h>
+#import <AVKit/AVKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 
-@interface ViewController : UIViewController
+#define CAPTURE_FPS 30
 
+@interface ViewController : UIViewController <AVCaptureFileOutputRecordingDelegate> {
+    BOOL isRecording;
+    AVCaptureSession *captureSession;
+    AVCaptureMovieFileOutput *movieFileOutput;
+    AVCaptureDeviceInput *deviceInput;
+    NSURL *currentURL;
+    PHAsset *videoAsset;
+    
+}
+
+@property (retain) AVCaptureVideoPreviewLayer *PreviewLayer;
+
+- (void) CameraSetOutputProperties;
+- (AVCaptureDevice *) CameraWithPosition:(AVCaptureDevicePosition) Position;
+- (IBAction)StartStopButtonPressed:(id)sender;
+- (IBAction)CameraToggleButtonPressed:(id)sender;
+- (IBAction)playVideo:(id)sender;
 
 @end
+
+
 
