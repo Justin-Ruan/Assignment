@@ -75,15 +75,21 @@
     }
     
     //Display the preview layer
+    
+    playerView = [[UIView alloc] init];
+    [[self view] addSubview:playerView];
+    
     CGRect layerRect = [[[self view] layer] bounds];
     [PreviewLayer setBounds: layerRect];
     [PreviewLayer setPosition:CGPointMake(CGRectGetMidX(layerRect), CGRectGetMidY(layerRect))];
-    UIView *cameraView = [[UIView alloc] init];
+    cameraView = [[UIView alloc] init];
     [[self view] addSubview:cameraView];
     [self.view sendSubviewToBack:cameraView];
     [[cameraView layer] addSublayer:PreviewLayer];
 
     [captureSession startRunning];
+    
+    
     
 }
 
@@ -97,33 +103,24 @@
 - (void)CameraSetOutputProperties{
     [movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
 }
-- (AVCaptureDevice *) CameraWithPosition:(AVCaptureDevicePosition)Position{
-    AVCaptureDeviceDiscoverySession *session = [AVCaptureDeviceDiscoverySession init];
-    NSArray *devices =  [session devices];
-    for (AVCaptureDevice *Device in devices)
-    {
-        if ([Device position] == Position)
-        {
-            return Device;
-        }
-    }
-    return nil;
-}
 
 - (IBAction)CameraToggleButtonPressed:(id)sender{
     
-    if ([[[AVCaptureDeviceDiscoverySession init] devices] count] > 1){
+    //if ([[[AVCaptureDeviceDiscoverySession init] devices] count] > 1){
         NSError *error;
         //AVCaptureDeviceInput *videoInput = [self videoInput];
+        AVCaptureDevice *newCamera = nil;
         AVCaptureDeviceInput *NewVideoInput;
         AVCaptureDevicePosition position = [[deviceInput device] position];
         if (position == AVCaptureDevicePositionBack)
         {
-            NewVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:[self CameraWithPosition:AVCaptureDevicePositionFront] error:&error];
+            newCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
+            NewVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:newCamera error:&error];
         }
         else if (position == AVCaptureDevicePositionFront)
         {
-            NewVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:[self CameraWithPosition:AVCaptureDevicePositionBack] error:&error];
+            newCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
+            NewVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:newCamera error:&error];
         }
         
         if (NewVideoInput != nil)
@@ -144,14 +141,14 @@
             //Set the connection properties again
             [self CameraSetOutputProperties];
             
-            
             [captureSession commitConfiguration];
             
         }
-    }
+   // }
 }
 - (IBAction)StartStopButtonPressed:(id)sender{
     if (!isRecording){
+        [self.btn_record setImage:[UIImage imageNamed:@"video_record_stop"] forState:normal];
         isRecording = YES;
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
         NSString *basePath = paths.firstObject;
@@ -172,6 +169,8 @@
         
     }else{
         isRecording = NO;
+        [self.btn_record setImage:[UIImage imageNamed:@"video_record_start"] forState:normal];
+        
         [movieFileOutput stopRecording];
     }
 }
@@ -247,8 +246,6 @@
     [layer setBackgroundColor:[UIColor blackColor].CGColor];
     [layer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
 
-    UIView *playerView = [[UIView alloc] init];
-    [[self view] addSubview:playerView];
     [self.view bringSubviewToFront:playerView];
     [[playerView layer] addSublayer:layer];
     [player play];
@@ -263,12 +260,29 @@
 //    [player play];
 }
 
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
+{
+    AVCaptureDeviceDiscoverySession *session = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera] mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionUnspecified];
+    NSArray *devices =  [session devices];
+    for (AVCaptureDevice *device in devices)
+    {
+        if ([device position] == position)
+            return device;
+    }
+    return nil;
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     
     //    Or you can get the image url from AssetsLibrary
     currentURL = [info valueForKey:UIImagePickerControllerMediaURL];
     [[picker topViewController] dismissViewControllerAnimated: YES completion: NULL];
+}
+
+- (IBAction)closeReplay:(id)sender{
+    [self.view sendSubviewToBack:playerView];
+    [captureSession startRunning];
 }
 
 @end
