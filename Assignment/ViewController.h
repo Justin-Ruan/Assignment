@@ -29,10 +29,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *btn_record;
 @property (retain) AVCaptureVideoPreviewLayer *PreviewLayer;
 
-- (void) CameraSetOutputProperties;
-- (AVCaptureDevice *) CameraWithPosition:(AVCaptureDevicePosition) Position;
-- (IBAction)StartStopButtonPressed:(id)sender;
-- (IBAction)CameraToggleButtonPressed:(id)sender;
+- (void) cameraSetOutputProperties;
+- (AVCaptureDevice *) cameraWithPosition:(AVCaptureDevicePosition) Position;
+- (IBAction)startStopButtonPressed:(id)sender;
+- (IBAction)cameraToggleButtonPressed:(id)sender;
 - (IBAction)playVideo:(id)sender;
 - (IBAction)seletcVideo:(id)sender;
 - (IBAction)closeReplay:(id)sender;
