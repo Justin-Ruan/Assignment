@@ -1,6 +1,6 @@
 # Assignment
 
-##How To Use
+## How To Use
 * Press the recording button and start to record video
 * Press the playing button at the top-left corner to play the video jsut recorded or selected from the photo library.
 * Press the selecting button at the button-left corner to select the video in the photo library.
