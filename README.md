@@ -17,7 +17,7 @@
     * Initialize the video player
     * Display the preview layer
 * cameraSetOutputProperties() - Connect the movieFileOutput
-* captureOutput() - Save the video to photo library after finish recording
+* captureOutput() - Save the video to photo library after finish recording
 * cameraWithPosition() - Get the camera devices
 * imagePickerController() - Store the URL of the video picked by user
 * cameraToggleButtonPressed() - Switch between front and back camera
