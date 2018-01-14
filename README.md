@@ -1,5 +1,12 @@
 # Assignment
 
+##How To Use
+* Press the recording button and start to record video
+* Press the playing button at the top-left corner to play the video jsut recorded or selected from the photo library.
+* Press the selecting button at the button-left corner to select the video in the photo library.
+* Press the dismissing button at the top-right corner to stop the video and move back to the recording view.
+* Press the switching button at the button-right corner to choose the switch camera.
+
 ## Framework
 * UIKit
 * AVKit
