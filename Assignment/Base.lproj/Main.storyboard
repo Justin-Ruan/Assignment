@@ -18,33 +18,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="1mg-xc-B2B">
-                                <rect key="frame" x="0.0" y="602" width="375" height="65"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Q19-N1-5Q7">
+                                <rect key="frame" x="5" y="607" width="365" height="50"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="zlg-kG-oV8">
-                                        <rect key="frame" x="163" y="0.0" width="49" height="65"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8j-43-A46">
-                                                <rect key="frame" x="0.0" y="0.0" width="49" height="30"/>
-                                                <state key="normal" title="Record"/>
-                                                <connections>
-                                                    <action selector="StartStopButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XF7-a6-mHI"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nN5-XQ-Zlj">
-                                                <rect key="frame" x="2.5" y="35" width="44" height="30"/>
-                                                <state key="normal" title="Select"/>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nN5-XQ-Zlj">
+                                        <rect key="frame" x="0.0" y="10" width="44" height="30"/>
+                                        <state key="normal" title="Select"/>
+                                        <connections>
+                                            <action selector="seletcVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GgV-Cb-JKM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8j-43-A46">
+                                        <rect key="frame" x="151" y="0.0" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="7ny-sL-SJh"/>
+                                            <constraint firstAttribute="height" constant="50" id="hxt-wx-jT7"/>
+                                        </constraints>
+                                        <state key="normal" image="video_record_start"/>
+                                        <connections>
+                                            <action selector="startStopButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0Vz-LO-d78"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lIV-QM-jou">
+                                        <rect key="frame" x="308" y="7" width="57" height="36"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="36" id="2c1-V6-Wwu"/>
+                                            <constraint firstAttribute="width" constant="57" id="ZCP-aa-na1"/>
+                                        </constraints>
+                                        <state key="normal" image="camera_switch"/>
+                                        <connections>
+                                            <action selector="cameraToggleButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FZk-XY-F9s"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="1mg-xc-B2B" firstAttribute="leading" secondItem="GX8-mF-0lr" secondAttribute="leading" id="9pZ-XB-qfP"/>
-                            <constraint firstItem="GX8-mF-0lr" firstAttribute="bottom" secondItem="1mg-xc-B2B" secondAttribute="bottom" id="cX0-sg-dyT"/>
-                            <constraint firstItem="1mg-xc-B2B" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="low-Gm-D8O"/>
+                            <constraint firstItem="GX8-mF-0lr" firstAttribute="bottom" secondItem="Q19-N1-5Q7" secondAttribute="bottom" constant="10" id="SV1-eL-fii"/>
+                            <constraint firstItem="Q19-N1-5Q7" firstAttribute="leading" secondItem="GX8-mF-0lr" secondAttribute="leading" constant="5" id="Te2-Lm-cru"/>
+                            <constraint firstItem="GX8-mF-0lr" firstAttribute="trailing" secondItem="Q19-N1-5Q7" secondAttribute="trailing" constant="5" id="oye-By-7Re"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GX8-mF-0lr"/>
                     </view>
@@ -54,7 +67,15 @@
                                 <action selector="playVideo:" destination="BYZ-38-t0r" id="euR-xZ-y9Y"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="stop" id="EfD-fY-FoR">
+                            <connections>
+                                <action selector="closeReplay:" destination="BYZ-38-t0r" id="UYe-tt-CgY"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="btn_record" destination="z8j-43-A46" id="2kT-tx-zF8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -79,4 +100,8 @@
             <point key="canvasLocation" x="139.20000000000002" y="132.23388305847078"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="camera_switch" width="36" height="36"/>
+        <image name="video_record_start" width="261" height="261"/>
+    </resources>
 </document>

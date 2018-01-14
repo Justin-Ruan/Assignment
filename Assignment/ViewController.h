@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreMedia/CoreMedia.h>
+#import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <Photos/Photos.h>
-#import <AVKit/AVKit.h>
-#import <MediaPlayer/MediaPlayer.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
 #define CAPTURE_FPS 30
 
@@ -22,16 +21,21 @@
     AVCaptureDeviceInput *deviceInput;
     NSURL *currentURL;
     PHAsset *videoAsset;
-    
+    UIView *cameraView;
+    UIView *playerView;
+    AVPlayer *player;
 }
 
+@property (weak, nonatomic) IBOutlet UIButton *btn_record;
 @property (retain) AVCaptureVideoPreviewLayer *PreviewLayer;
 
-- (void) CameraSetOutputProperties;
-- (AVCaptureDevice *) CameraWithPosition:(AVCaptureDevicePosition) Position;
-- (IBAction)StartStopButtonPressed:(id)sender;
-- (IBAction)CameraToggleButtonPressed:(id)sender;
+- (void) cameraSetOutputProperties;
+- (AVCaptureDevice *) cameraWithPosition:(AVCaptureDevicePosition) Position;
+- (IBAction)startStopButtonPressed:(id)sender;
+- (IBAction)cameraToggleButtonPressed:(id)sender;
 - (IBAction)playVideo:(id)sender;
+- (IBAction)seletcVideo:(id)sender;
+- (IBAction)closeReplay:(id)sender;
 
 @end
 
